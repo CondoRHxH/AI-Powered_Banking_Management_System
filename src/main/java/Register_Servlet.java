@@ -1,12 +1,13 @@
 
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.ServletResponse;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -17,14 +18,14 @@ import org.mindrot.jbcrypt.BCrypt;
 /**
  * Servlet implementation class Login_Servlet
  */
-@WebServlet("/Login_Servlet")
-public class Login_Servlet extends HttpServlet {
+@WebServlet("/Register_Servlet")
+public class Register_Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Login_Servlet() {
+    public Register_Servlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -33,8 +34,7 @@ public class Login_Servlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		RequestDispatcher ds = getServletContext().getRequestDispatcher("/Login.jsp");
+		RequestDispatcher ds = getServletContext().getRequestDispatcher("/Register.jsp");
 		ds.forward(request, response);
 	}
 
@@ -42,40 +42,41 @@ public class Login_Servlet extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		
+	
+
+		// hash password before saving
+		
+		
+		String nom = request.getParameter("nom");
+		String prenom = request.getParameter("prenom");
+		
 		String email = request.getParameter("email");
         String password = request.getParameter("password");
 
-        try {
+        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
 
+        try {
             Connection con = DBConnection.getConnection();
 
-            String sql = "SELECT password FROM users WHERE email=?";
+            
+            String sql = "INSERT INTO users(nom, prenom, email, password) VALUES (?, ?, ?, ?)";
+
             PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, email);
+            ps.setString(1, nom);
+            ps.setString(2, prenom);
+            ps.setString(3, email);
+            ps.setString(4, hashedPassword);
 
-            ResultSet rs = ps.executeQuery();
+            int i = ps.executeUpdate();
 
-            if(rs.next()) {
-
-                String hashedPassword = rs.getString("password");
-
-                // 🔥 compare password with hash
-                if(BCrypt.checkpw(password, hashedPassword)) {
-
-                    request.setAttribute("msg", "Login OK 😎🔥");
-                    request.getRequestDispatcher("Dashboard.jsp")
-                           .forward(request, response);
-
-                } else {
-                    request.setAttribute("msg", "Wrong password 💀");
-                    request.getRequestDispatcher("Login.jsp")
-                           .forward(request, response);
-                }
-
+            if(i > 0) {
+                request.setAttribute("msg", "Register success 😎🔥");
+                request.getRequestDispatcher("Login.jsp").forward(request, response);
             } else {
-                request.setAttribute("msg", "User not found 😵");
-                request.getRequestDispatcher("Login.jsp")
-                       .forward(request, response);
+                request.setAttribute("msg", "Register failed 💀");
+                request.getRequestDispatcher("Register.jsp").forward(request, response);
             }
 
         } catch(Exception e) {

@@ -9,7 +9,7 @@
 <body>
 	<h1>Hello</h1>
 	
-	<form method="POST" action="Login_Servlet">
+	<form method="POST" action="Register_Servlet">
 		<label>Nom : </label>
 		<input type="text" name="nom"><br> <br>
 		
