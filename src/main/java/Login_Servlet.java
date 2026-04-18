@@ -62,7 +62,7 @@ public class Login_Servlet extends HttpServlet {
                 // 🔥 compare password with hash
                 if(BCrypt.checkpw(password, hashedPassword)) {
 
-                    request.setAttribute("msg", "Login OK 😎🔥");
+                    request.setAttribute("msg", "Login OK");
                     request.getRequestDispatcher("Dashboard.jsp")
                            .forward(request, response);
 
