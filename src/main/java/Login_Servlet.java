@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -43,44 +44,53 @@ public class Login_Servlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String email = request.getParameter("email");
-        String password = request.getParameter("password");
+		String password = request.getParameter("password");
 
-        try {
+		try {
 
-            Connection con = DBConnection.getConnection();
+			Connection con = DBConnection.getConnection();
 
-            String sql = "SELECT password FROM users WHERE email=?";
-            PreparedStatement ps = con.prepareStatement(sql);
-            ps.setString(1, email);
+			String sql = "SELECT password FROM users WHERE email=?";
+			PreparedStatement ps = con.prepareStatement(sql);
+			ps.setString(1, email);
 
-            ResultSet rs = ps.executeQuery();
+			ResultSet rs = ps.executeQuery();
 
-            if(rs.next()) {
+			if (rs.next()) {
 
-                String hashedPassword = rs.getString("password");
+				String hashedPassword = rs.getString("password");
 
-                // 🔥 compare password with hash
-                if(BCrypt.checkpw(password, hashedPassword)) {
+				if (BCrypt.checkpw(password, hashedPassword)) {
 
-                    request.setAttribute("msg", "Login OK");
-                    request.getRequestDispatcher("Dashboard.jsp")
-                           .forward(request, response);
+					// 🔥 kill old session (important)
+					HttpSession oldSession = request.getSession(false);
+					if (oldSession != null) {
+						oldSession.invalidate();
+					}
 
-                } else {
-                    request.setAttribute("msg", "Wrong password 💀");
-                    request.getRequestDispatcher("Login.jsp")
-                           .forward(request, response);
-                }
+					// 🔥 create new session
+					HttpSession session = request.getSession(true);
+					session.setAttribute("user", email);
 
-            } else {
-                request.setAttribute("msg", "User not found 😵");
-                request.getRequestDispatcher("Login.jsp")
-                       .forward(request, response);
-            }
+					session.setMaxInactiveInterval(30 * 60); // 30 min timeout
 
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+					// 🚀 redirect to dashboard (BEST PRACTICE)
+					response.sendRedirect("Dashboard.jsp");
+
+				} else {
+					request.setAttribute("msg", "Wrong password 💀");
+					request.getRequestDispatcher("Login.jsp").forward(request, response);
+				}
+
+			} else {
+				request.setAttribute("msg", "User not found 😵");
+				request.getRequestDispatcher("Login.jsp").forward(request, response);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			request.setAttribute("msg", "Server error 💥");
+			request.getRequestDispatcher("Login.jsp").forward(request, response);
+		}
 	}
-
 }

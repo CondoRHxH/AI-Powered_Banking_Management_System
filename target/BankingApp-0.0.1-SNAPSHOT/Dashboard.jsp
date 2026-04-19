@@ -18,6 +18,5 @@ if(userSession == null || userSession.getAttribute("user") == null) {
 </head>
 <body>
     <h1>Hello hello 😎</h1>
-    <a href="Logout_Servlet">Logout 🚪</a>
 </body>
 </html>
