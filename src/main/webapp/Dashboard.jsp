@@ -16,6 +16,7 @@ Map<String,Double> categories = (Map<String,Double>) request.getAttribute("categ
 if(transactions == null) transactions = new ArrayList<>();
 if(categories == null) categories = new LinkedHashMap<>();
 String successMsg = (String) request.getAttribute("msg");
+String displayName = (userEmail != null) ? userEmail.split("@")[0] : "User";
 %>
 <!DOCTYPE html>
 <html>
@@ -23,91 +24,104 @@ String successMsg = (String) request.getAttribute("msg");
 <meta charset="UTF-8">
 <title>BankingApp — Dashboard</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#0f0f1a;--sidebar:#16162a;--card:#1e1e35;--card2:#252540;--accent:#7c6fff;--accent2:#00d4aa;--accent3:#ff6b9d;--text:#e8e8ff;--muted:#8888aa;--border:#2a2a45;}
-body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;display:flex;height:100vh;overflow:hidden;font-size:13px}
-.sidebar{width:200px;background:var(--sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:20px 0;flex-shrink:0}
-.logo{padding:0 20px 24px;font-size:18px;font-weight:600;color:var(--accent);letter-spacing:1px}
-.logo span{color:var(--accent2)}
-.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:var(--muted);font-size:13px;border-left:3px solid transparent;text-decoration:none}
-.nav-item:hover{color:var(--text);background:rgba(124,111,255,0.08)}
-.nav-item.active{color:var(--accent);background:rgba(124,111,255,0.12);border-left:3px solid var(--accent)}
-.nav-divider{height:1px;background:var(--border);margin:12px 20px}
-.sidebar-bottom{margin-top:auto}
+:root{--bg:#0a0a12;--s1:#12121f;--s2:#1a1a2e;--s3:#22223b;--p:#a78bfa;--p2:#38bdf8;--p3:#fb7185;--p4:#34d399;--p5:#fbbf24;--t:#f1f0ff;--m:#9998bb;--b:#ffffff18;}
+body{background:var(--bg);color:var(--t);font-family:'Outfit',sans-serif;display:flex;height:100vh;overflow:hidden;font-size:13px}
+.sidebar{width:210px;background:var(--s1);border-right:1px solid var(--b);display:flex;flex-direction:column;padding:24px 0;flex-shrink:0}
+.logo{padding:0 20px 28px;font-size:20px;font-weight:700;letter-spacing:2px}
+.logo .l1{color:var(--p)}.logo .l2{color:var(--p2)}
+.nav{display:flex;flex-direction:column;gap:2px;padding:0 12px}
+.ni{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;color:var(--m);font-size:13px;text-decoration:none;font-weight:400;transition:all .2s;border:1px solid transparent}
+.ni:hover{background:var(--b);color:var(--t)}
+.ni.on{background:linear-gradient(135deg,#a78bfa22,#38bdf822);color:var(--p);border:1px solid #a78bfa33}
+.ni svg{width:16px;height:16px;flex-shrink:0}
+.ndiv{height:1px;background:var(--b);margin:12px 0}
+.sb-bot{margin-top:auto;padding:0 12px}
 .main{flex:1;display:flex;flex-direction:column;overflow:hidden}
-.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 24px;border-bottom:1px solid var(--border)}
-.welcome{font-size:16px;font-weight:500}
-.welcome span{color:var(--accent2)}
-.content{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px}
-.row{display:grid;gap:12px}
-.row-3{grid-template-columns:repeat(3,1fr)}
-.row-2{grid-template-columns:1.4fr 1fr}
-.row-bottom{grid-template-columns:1fr 1fr 1.1fr}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px}
-.card-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:6px}
-.card-value{font-size:22px;font-weight:600;font-family:'DM Mono',monospace}
-.card-sub{font-size:11px;color:var(--accent2);margin-top:4px}
-.card-sub.neg{color:var(--accent3)}
-.stat-balance{border-top:2px solid var(--accent)}
-.stat-income{border-top:2px solid var(--accent2)}
-.stat-expense{border-top:2px solid var(--accent3)}
-.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.chart-title{font-size:13px;font-weight:500}
-.chart-legend{display:flex;gap:12px}
-.legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--muted)}
-.legend-dot{width:8px;height:8px;border-radius:50%}
-.chart-area{position:relative;height:110px}
-.donut-wrap{display:flex;align-items:center;gap:16px;margin-top:8px}
-.donut-labels{display:flex;flex-direction:column;gap:8px}
-.donut-label{display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
-.donut-swatch{width:8px;height:8px;border-radius:2px;flex-shrink:0}
-.tx-item{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}
-.tx-item:last-child{border-bottom:none}
-.tx-left{display:flex;align-items:center;gap:10px}
-.tx-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
-.tx-name{font-size:13px;font-weight:500}
-.tx-date{font-size:11px;color:var(--muted)}
-.tx-amount{font-size:13px;font-weight:600;font-family:'DM Mono',monospace}
-.tx-amount.inc{color:var(--accent2)}
-.tx-amount.exp{color:var(--accent3)}
-.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-.form-group{display:flex;flex-direction:column;gap:5px}
-.form-group.full{grid-column:1/-1}
-.form-label{font-size:11px;color:var(--muted)}
-.form-input{background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;color:var(--text);font-size:12px;font-family:inherit;outline:none;transition:border 0.2s;width:100%}
-.form-input:focus{border-color:var(--accent)}
-select.form-input option{background:var(--card2)}
-.form-btn{grid-column:1/-1;background:var(--accent);border:none;border-radius:8px;padding:10px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;width:100%}
-.form-btn:hover{opacity:0.85}
-.empty{color:var(--muted);font-size:12px;padding:20px 0;text-align:center}
-.msg{background:rgba(0,212,170,0.1);border:1px solid var(--accent2);color:var(--accent2);border-radius:8px;padding:8px 12px;font-size:12px;grid-column:1/-1}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid var(--b)}
+.greet{font-size:15px;font-weight:600}
+.greet em{color:var(--p);font-style:normal}
+.tbr{display:flex;align-items:center;gap:10px}
+.srch{background:var(--s2);border:1px solid var(--b);border-radius:10px;padding:7px 14px;color:var(--t);font-size:12px;width:170px;outline:none;font-family:inherit}
+.avt{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#a78bfa,#38bdf8);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;color:#fff;text-transform:uppercase}
+.content{flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:14px}
+.g3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.g2a{display:grid;grid-template-columns:1.5fr 1fr;gap:12px}
+.g3b{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.card{background:var(--s2);border:1px solid var(--b);border-radius:14px;padding:16px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px}
+.ca::before{background:linear-gradient(90deg,#a78bfa,#818cf8)}
+.cb::before{background:linear-gradient(90deg,#34d399,#38bdf8)}
+.cc::before{background:linear-gradient(90deg,#fb7185,#f43f5e)}
+.clabel{font-size:10px;color:var(--m);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-weight:500}
+.cval{font-size:24px;font-weight:700;font-family:'DM Mono',monospace;letter-spacing:-1px}
+.csub{font-size:11px;margin-top:6px;display:flex;align-items:center;gap:6px;color:var(--m)}
+.pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:600}
+.pill-up{background:#34d39922;color:var(--p4)}
+.pill-dn{background:#fb718522;color:var(--p3)}
+.chtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.chtitle{font-size:13px;font-weight:600}
+.leg{display:flex;gap:14px}
+.legi{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--m)}
+.legdot{width:8px;height:8px;border-radius:50%}
+.cha{position:relative;height:120px}
+.dwrap{display:flex;align-items:center;gap:14px;margin-top:8px}
+.dlabs{display:flex;flex-direction:column;gap:8px;flex:1}
+.dlab{display:flex;align-items:center;justify-content:space-between;font-size:11px}
+.dleft{display:flex;align-items:center;gap:6px;color:var(--m)}
+.dsw{width:8px;height:8px;border-radius:2px;flex-shrink:0}
+.dval{font-family:'DM Mono',monospace;font-size:11px;color:var(--t)}
+.txi{display:flex;align-items:center;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--b)}
+.txi:last-child{border-bottom:none}
+.txl{display:flex;align-items:center;gap:10px}
+.txico{width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;font-family:'DM Mono',monospace}
+.txn{font-size:13px;font-weight:500}
+.txd{font-size:10px;color:var(--m);margin-top:1px}
+.txa{font-size:13px;font-weight:600;font-family:'DM Mono',monospace}
+.inc{color:var(--p4)}.exp{color:var(--p3)}
+.empty{color:var(--m);font-size:12px;text-align:center;padding:20px 0}
+.ai-card{background:linear-gradient(135deg,#1a1a3e,#1e1e35) !important;border:1px solid #a78bfa33 !important}
+.ai-pulse{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+.ai-dot{width:8px;height:8px;border-radius:50%;background:var(--p);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.ai-label{font-size:10px;color:var(--p);font-weight:600;text-transform:uppercase;letter-spacing:1px}
+.ai-msg{font-size:12px;color:var(--m);line-height:1.7;min-height:55px}
+.ai-input{background:var(--s3);border:1px solid var(--b);border-radius:8px;padding:7px 10px;color:var(--t);font-size:12px;font-family:inherit;outline:none;width:100%;margin-top:8px;transition:border .2s}
+.ai-input:focus{border-color:var(--p)}
+.ai-loading{color:var(--p);font-size:11px;margin-top:4px;display:none}
+.ai-btn{margin-top:8px;background:#a78bfa22;border:1px solid #a78bfa44;border-radius:8px;padding:7px 12px;color:var(--p);font-size:11px;font-weight:600;cursor:pointer;font-family:inherit;width:100%;transition:background .2s}
+.ai-btn:hover{background:#a78bfa33}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fl{font-size:10px;color:var(--m);text-transform:uppercase;letter-spacing:.5px;font-weight:500}
+.fi{background:var(--s3);border:1px solid var(--b);border-radius:9px;padding:8px 11px;color:var(--t);font-size:12px;font-family:inherit;outline:none;width:100%;transition:border .2s}
+.fi:focus{border-color:var(--p)}
+select.fi option{background:var(--s3)}
+.full{grid-column:1/-1}
+.fbtn{grid-column:1/-1;background:linear-gradient(135deg,#a78bfa,#818cf8);border:none;border-radius:10px;padding:11px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;letter-spacing:.3px;transition:opacity .2s}
+.fbtn:hover{opacity:.9}
+.smsg{background:#34d39922;border:1px solid #34d39944;color:var(--p4);border-radius:8px;padding:8px 12px;font-size:12px;grid-column:1/-1}
 </style>
 </head>
 <body>
 
 <div class="sidebar">
-  <div class="logo">III <span>BANK</span></div>
-  <a class="nav-item active" href="Dashboard_Servlet">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1" fill="currentColor" opacity=".5"/><rect x="1" y="9" width="6" height="6" rx="1" fill="currentColor" opacity=".5"/><rect x="9" y="9" width="6" height="6" rx="1" fill="currentColor" opacity=".5"/></svg>
-    Analytics
-  </a>
-  <a class="nav-item" href="#">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M2 5h12M2 8h8M2 11h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-    Transactions
-  </a>
-  <a class="nav-item" href="#">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="6" r="3" stroke="currentColor" stroke-width="1.5"/><path d="M2 14c0-3.314 2.686-5 6-5s6 1.686 6 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-    Profile
-  </a>
-  <div class="nav-divider"></div>
-  <a class="nav-item" href="#">
-    <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-    Settings
-  </a>
-  <div class="sidebar-bottom">
-    <a class="nav-item" href="Logout_Servlet">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3M10 11l3-3-3-3M13 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <div class="logo"><span class="l1">III</span> <span class="l2">BANK</span></div>
+  <div class="nav">
+    <a class="ni on" href="Dashboard_Servlet">
+      <svg viewBox="0 0 16 16" fill="none"><rect x="1" y="1" width="6" height="6" rx="1.5" fill="currentColor"/><rect x="9" y="1" width="6" height="6" rx="1.5" fill="currentColor" opacity=".5"/><rect x="1" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".5"/><rect x="9" y="9" width="6" height="6" rx="1.5" fill="currentColor" opacity=".5"/></svg>
+      Analytics
+    </a>
+    <div class="ndiv"></div>
+    <a class="ni" href="#" style="color:var(--m)">
+      <svg viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      Settings
+    </a>
+  </div>
+  <div class="sb-bot">
+    <a class="ni" href="Logout_Servlet" style="color:#fb718599">
+      <svg viewBox="0 0 16 16" fill="none"><path d="M6 3H3a1 1 0 00-1 1v8a1 1 0 001 1h3M10 11l3-3-3-3M13 8H6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       Log Out
     </a>
   </div>
@@ -115,53 +129,61 @@ select.form-input option{background:var(--card2)}
 
 <div class="main">
   <div class="topbar">
-    <div class="welcome">Hello, <span><%= userEmail != null ? userEmail.split("@")[0] : "" %></span> — Welcome Back</div>
+    <div class="greet">Good day, <em><%= displayName %></em> — here's your overview</div>
+    <div class="tbr">
+      <input class="srch" placeholder="Search transactions...">
+      <div class="avt"><%= displayName.substring(0,1).toUpperCase() %></div>
+    </div>
   </div>
 
   <div class="content">
-    <div class="row row-3">
-      <div class="card stat-balance">
-        <div class="card-label">Total Balance</div>
-        <div class="card-value">$<%= String.format("%.2f", balance) %></div>
-        <div class="card-sub <%= balance < 0 ? "neg" : "" %>"><%= balance >= 0 ? "Positive balance" : "Negative balance" %></div>
+
+    <div class="g3">
+      <div class="card ca">
+        <div class="clabel">Total Balance</div>
+        <div class="cval">$<%= String.format("%.2f", balance) %></div>
+        <div class="csub">
+          <span class="pill <%= balance>=0?"pill-up":"pill-dn" %>"><%= balance>=0?"+":"-" %><%= String.format("%.1f", totalIncome>0?Math.abs(balance/totalIncome)*100:0) %>%</span>
+          net ratio
+        </div>
       </div>
-      <div class="card stat-income">
-        <div class="card-label">Total Income</div>
-        <div class="card-value">$<%= String.format("%.2f", totalIncome) %></div>
-        <div class="card-sub">All time income</div>
+      <div class="card cb">
+        <div class="clabel">Total Income</div>
+        <div class="cval">$<%= String.format("%.2f", totalIncome) %></div>
+        <div class="csub"><span class="pill pill-up">all time</span> earnings</div>
       </div>
-      <div class="card stat-expense">
-        <div class="card-label">Total Expenses</div>
-        <div class="card-value">$<%= String.format("%.2f", totalExpense) %></div>
-        <div class="card-sub neg">All time expenses</div>
+      <div class="card cc">
+        <div class="clabel">Total Expenses</div>
+        <div class="cval">$<%= String.format("%.2f", totalExpense) %></div>
+        <div class="csub"><span class="pill pill-dn">all time</span> spending</div>
       </div>
     </div>
 
-    <div class="row row-2">
+    <div class="g2a">
       <div class="card">
-        <div class="chart-header">
-          <div class="chart-title">Financial Analytics</div>
-          <div class="chart-legend">
-            <div class="legend-item"><div class="legend-dot" style="background:#00d4aa"></div>Income</div>
-            <div class="legend-item"><div class="legend-dot" style="background:#ff6b9d"></div>Expenses</div>
+        <div class="chtop">
+          <div class="chtitle">Financial Analytics</div>
+          <div class="leg">
+            <div class="legi"><div class="legdot" style="background:#34d399"></div>Income</div>
+            <div class="legi"><div class="legdot" style="background:#fb7185"></div>Expenses</div>
           </div>
         </div>
-        <div class="chart-area"><canvas id="lineChart"></canvas></div>
+        <div class="cha"><canvas id="lineChart"></canvas></div>
       </div>
       <div class="card">
-        <div class="chart-header"><div class="chart-title">Spending Categories</div></div>
-        <div class="donut-wrap">
-          <canvas id="donutChart" width="100" height="100" style="width:100px;height:100px;flex-shrink:0"></canvas>
-          <div class="donut-labels">
+        <div class="chtop"><div class="chtitle">Spending Categories</div></div>
+        <div class="dwrap">
+          <canvas id="donutChart" width="90" height="90" style="width:90px;height:90px;flex-shrink:0"></canvas>
+          <div class="dlabs">
             <% if(categories.isEmpty()) { %>
-              <span style="color:var(--muted);font-size:11px">No expenses yet</span>
+              <span style="color:var(--m);font-size:11px">No expenses yet</span>
             <% } else {
-              String[] catColors = {"#7c6fff","#00d4aa","#ff6b9d","#ffd166","#06d6a0","#ef476f"};
-              int ci = 0;
-              for(Map.Entry<String,Double> entry : categories.entrySet()) { %>
-                <div class="donut-label">
-                  <div class="donut-swatch" style="background:<%= catColors[ci % catColors.length] %>"></div>
-                  <%= entry.getKey() %> ($<%= String.format("%.0f", entry.getValue()) %>)
+              String[] cc = {"#a78bfa","#34d399","#fb7185","#fbbf24","#38bdf8","#f472b6"};
+              int ci=0;
+              for(Map.Entry<String,Double> e : categories.entrySet()) { %>
+                <div class="dlab">
+                  <div class="dleft"><div class="dsw" style="background:<%= cc[ci%cc.length] %>"></div><%= e.getKey() %></div>
+                  <div class="dval">$<%= String.format("%.0f", e.getValue()) %></div>
                 </div>
             <% ci++; } } %>
           </div>
@@ -169,66 +191,78 @@ select.form-input option{background:var(--card2)}
       </div>
     </div>
 
-    <div class="row row-bottom">
+    <div class="g3b">
       <div class="card">
-        <div class="chart-header"><div class="chart-title">Recent Transactions</div></div>
+        <div class="chtop"><div class="chtitle">Recent Transactions</div></div>
         <% if(transactions.isEmpty()) { %>
           <div class="empty">No transactions yet</div>
         <% } else { for(Map<String,String> tx : transactions) {
-          boolean isIncome = tx.get("type").equals("income"); %>
-          <div class="tx-item">
-            <div class="tx-left">
-              <div class="tx-icon" style="background:<%= isIncome ? "rgba(0,212,170,0.15)" : "rgba(255,107,157,0.15)" %>">
-                <%= isIncome ? "↑" : "↓" %>
+          boolean isIncome = "income".equals(tx.get("type")); %>
+          <div class="txi">
+            <div class="txl">
+              <div class="txico" style="background:<%= isIncome?"#34d39922":"#fb718522" %>;color:<%= isIncome?"#34d399":"#fb7185" %>">
+                <%= isIncome?"+":"-" %>
               </div>
               <div>
-                <div class="tx-name"><%= tx.get("category") %></div>
-                <div class="tx-date"><%= tx.get("date") %><%= !tx.get("description").isEmpty() ? " — " + tx.get("description") : "" %></div>
+                <div class="txn"><%= tx.get("category") %></div>
+                <div class="txd"><%= tx.get("date") %><%= !tx.get("description").isEmpty()?" — "+tx.get("description"):"" %></div>
               </div>
             </div>
-            <div class="tx-amount <%= isIncome ? "inc" : "exp" %>">
-              <%= isIncome ? "+" : "-" %>$<%= String.format("%.2f", Double.parseDouble(tx.get("amount"))) %>
+            <div class="txa <%= isIncome?"inc":"exp" %>">
+              <%= isIncome?"+":"-" %>$<%= String.format("%.2f", Double.parseDouble(tx.get("amount"))) %>
             </div>
           </div>
         <% } } %>
       </div>
 
-      <div class="card">
-        <div class="chart-header"><div class="chart-title">Income vs Expenses</div></div>
-        <div class="chart-area"><canvas id="barChart"></canvas></div>
+      <div class="card ai-card">
+        <div class="ai-pulse">
+          <div class="ai-dot"></div>
+          <div class="ai-label">AI Financial Advisor</div>
+        </div>
+        <div class="ai-msg" id="ai-msg">
+          <% if(totalIncome==0 && totalExpense==0) { %>
+            Start adding transactions and I'll analyze your finances!
+          <% } else { %>
+            Balance $<%= String.format("%.2f",balance) %> — you've spent <%= totalIncome>0?String.format("%.0f",(totalExpense/totalIncome)*100):"0" %>% of income. <%= balance>=0?"Keep it up!":"Watch your spending!" %>
+          <% } %>
+        </div>
+        <input class="ai-input" id="ai-input" type="text" placeholder="Ask your AI advisor...">
+        <div class="ai-loading" id="ai-loading">Thinking...</div>
+        <button class="ai-btn" onclick="askAI()">Ask AI Advisor</button>
       </div>
 
       <div class="card">
-        <div class="chart-title">Add Transaction</div>
+        <div class="chtitle">Add Transaction</div>
         <form action="Transaction_Servlet" method="post">
-          <div class="form-grid">
+          <div class="fgrid">
             <% if(successMsg != null) { %>
-              <div class="msg"><%= successMsg %></div>
+              <div class="smsg"><%= successMsg %></div>
             <% } %>
-            <div class="form-group">
-              <div class="form-label">Type</div>
-              <select class="form-input" name="type">
+            <div class="fg">
+              <div class="fl">Type</div>
+              <select class="fi" name="type">
                 <option value="income">Income</option>
                 <option value="expense">Expense</option>
               </select>
             </div>
-            <div class="form-group">
-              <div class="form-label">Amount ($)</div>
-              <input class="form-input" type="number" name="amount" placeholder="0.00" step="0.01" min="0" required>
+            <div class="fg">
+              <div class="fl">Amount ($)</div>
+              <input class="fi" type="number" name="amount" placeholder="0.00" step="0.01" min="0" required>
             </div>
-            <div class="form-group">
-              <div class="form-label">Category</div>
-              <input class="form-input" type="text" name="category" placeholder="e.g. Salary, Food" required>
+            <div class="fg">
+              <div class="fl">Category</div>
+              <input class="fi" type="text" name="category" placeholder="e.g. Salary" required>
             </div>
-            <div class="form-group">
-              <div class="form-label">Date</div>
-              <input class="form-input" type="date" name="transaction_date" required>
+            <div class="fg">
+              <div class="fl">Date</div>
+              <input class="fi" type="date" name="transaction_date" required>
             </div>
-            <div class="form-group full">
-              <div class="form-label">Description (optional)</div>
-              <input class="form-input" type="text" name="description" placeholder="Note...">
+            <div class="fg full">
+              <div class="fl">Note</div>
+              <input class="fi" type="text" name="description" placeholder="Optional...">
             </div>
-            <button class="form-btn" type="submit">Save Transaction</button>
+            <button class="fbtn" type="submit">Save Transaction</button>
           </div>
         </form>
       </div>
@@ -238,38 +272,53 @@ select.form-input option{background:var(--card2)}
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
 <script>
-Chart.defaults.color='#8888aa';
-Chart.defaults.borderColor='#2a2a45';
-Chart.defaults.font.family='Space Grotesk';
+Chart.defaults.color='#9998bb';
+Chart.defaults.borderColor='#ffffff18';
+Chart.defaults.font.family='Outfit';
 
-new Chart(document.getElementById('lineChart').getContext('2d'),{
+new Chart(document.getElementById('lineChart'),{
   type:'line',
   data:{
     labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
     datasets:[
-      {label:'Income',data:[0,0,0,<%=totalIncome/7%>,0,0,0],borderColor:'#00d4aa',backgroundColor:'rgba(0,212,170,0.08)',tension:0.4,fill:true,pointRadius:2},
-      {label:'Expenses',data:[0,0,0,<%=totalExpense/7%>,0,0,0],borderColor:'#ff6b9d',backgroundColor:'rgba(255,107,157,0.08)',tension:0.4,fill:true,pointRadius:2}
+      {label:'Income',data:[0,0,0,<%=totalIncome/7%>,0,0,0],borderColor:'#34d399',backgroundColor:'#34d39918',tension:0.4,fill:true,pointRadius:3,pointBackgroundColor:'#34d399'},
+      {label:'Expenses',data:[0,0,0,<%=totalExpense/7%>,0,0,0],borderColor:'#fb7185',backgroundColor:'#fb718518',tension:0.4,fill:true,pointRadius:3,pointBackgroundColor:'#fb7185'}
     ]
   },
-  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#2a2a45'}}}}
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#ffffff0a'}}}}
 });
 
-const catVals=[<% int ci3=0; for(Double v:categories.values()){%><%=v%><%if(++ci3<categories.size())out.print(",");}%>];
-const catLabels=[<% int ci2=0; for(String k:categories.keySet()){%>'<%=k%>'<%if(++ci2<categories.size())out.print(",");}%>];
-new Chart(document.getElementById('donutChart').getContext('2d'),{
+const catVals=[<% int ci3=0;for(Double v:categories.values()){%><%=v%><%if(++ci3<categories.size())out.print(",");}%>];
+const catLabels=[<% int ci2=0;for(String k:categories.keySet()){%>'<%=k%>'<%if(++ci2<categories.size())out.print(",");}%>];
+new Chart(document.getElementById('donutChart'),{
   type:'doughnut',
-  data:{labels:catLabels,datasets:[{data:catVals.length>0?catVals:[1],backgroundColor:catVals.length>0?['#7c6fff','#00d4aa','#ff6b9d','#ffd166','#06d6a0','#ef476f']:['#2a2a45'],borderWidth:0}]},
-  options:{responsive:false,plugins:{legend:{display:false}},cutout:'72%'}
+  data:{labels:catLabels,datasets:[{data:catVals.length>0?catVals:[1],backgroundColor:catVals.length>0?['#a78bfa','#34d399','#fb7185','#fbbf24','#38bdf8','#f472b6']:['#ffffff18'],borderWidth:0,hoverOffset:4}]},
+  options:{responsive:false,plugins:{legend:{display:false}},cutout:'75%'}
 });
 
-new Chart(document.getElementById('barChart').getContext('2d'),{
-  type:'bar',
-  data:{
-    labels:['Income','Expenses'],
-    datasets:[{data:[<%=totalIncome%>,<%=totalExpense%>],backgroundColor:['rgba(0,212,170,0.7)','rgba(255,107,157,0.7)'],borderRadius:6,borderWidth:0}]
-  },
-  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{grid:{display:false}},y:{grid:{color:'#2a2a45'}}}}
-});
+async function askAI(){
+  const q=document.getElementById('ai-input').value.trim();
+  if(!q) return;
+  const msg=document.getElementById('ai-msg');
+  const load=document.getElementById('ai-loading');
+  load.style.display='block';
+  msg.style.opacity='0.4';
+  const ctx=`User finances: balance $<%=String.format("%.2f",balance)%>, income $<%=String.format("%.2f",totalIncome)%>, expenses $<%=String.format("%.2f",totalExpense)%>. Question: ${q}. Reply in 2-3 short sentences with practical advice.`;
+  try{
+    const res=await fetch('http://localhost:11434/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'llama3.2',prompt:ctx,stream:false})
+    });
+    const data=await res.json();
+    msg.textContent=data.response||'No response received.';
+  }catch(e){
+    msg.textContent='AI advisor offline. Make sure Ollama is running with: ollama run llama3.2';
+  }
+  load.style.display='none';
+  msg.style.opacity='1';
+  document.getElementById('ai-input').value='';
+}
 </script>
 </body>
 </html>
