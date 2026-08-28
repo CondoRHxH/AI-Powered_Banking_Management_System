@@ -16,7 +16,7 @@
         <property name="context-root" value="BankingApp"/>
                         
         
-        <property name="java-output-path" value="/BankingApp/build/classes"/>
+        <property name="java-output-path" value="/BankingAppV2/target/classes"/>
                     
     
     </wb-module>
