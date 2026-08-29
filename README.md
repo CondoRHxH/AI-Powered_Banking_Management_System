@@ -30,13 +30,13 @@ III BANK lets users register an account, securely log in, track income and expen
 ## Screens
 
 - **Login** — email + password sign-in with a "Secure Login" indicator
-- <img width="1521" height="865" alt="image" src="https://github.com/user-attachments/assets/5ac8d4a6-779a-40b0-9a2a-f4ab2606eae6" />
+ <img width="1521" height="865" alt="image" src="https://github.com/user-attachments/assets/5ac8d4a6-779a-40b0-9a2a-f4ab2606eae6" />
 
 - **Register** — first name, last name, email, and password sign-up
-- <img width="1447" height="888" alt="image" src="https://github.com/user-attachments/assets/f44aa2a9-0acd-4817-93ca-21c4b41cc19e" />
+ <img width="1447" height="888" alt="image" src="https://github.com/user-attachments/assets/f44aa2a9-0acd-4817-93ca-21c4b41cc19e" />
 
 - **Dashboard** — total balance, income, expenses, financial analytics chart, spending categories donut chart, recent transactions, AI advisor panel, and quick add-transaction form
-- <img width="1897" height="911" alt="image" src="https://github.com/user-attachments/assets/02827265-dc32-45da-bb62-403444a84621" />
+ <img width="1897" height="911" alt="image" src="https://github.com/user-attachments/assets/02827265-dc32-45da-bb62-403444a84621" />
 
 - **Transactions** — full searchable/sortable transaction history
 <img width="1920" height="917" alt="image" src="https://github.com/user-attachments/assets/ae80b2c0-1259-4e89-b0e5-db2eafca6986" />
