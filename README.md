@@ -29,7 +29,7 @@ III BANK lets users register an account, securely log in, track income and expen
 
 ## Screens
 
-- **Login** : email + password sign-in with a "Secure Login" indicator
+- **Login** : Email + password sign-in with a "Secure Login" indicator
  <img width="1521" height="865" alt="image" src="https://github.com/user-attachments/assets/5ac8d4a6-779a-40b0-9a2a-f4ab2606eae6" />
 
 - **Register** :  First name, Last name, email, and password sign-up
