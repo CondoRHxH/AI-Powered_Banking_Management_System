@@ -98,7 +98,7 @@ Once deployed, go to:
 http://localhost:8080/<context-path>/Register.jsp
 ```
 
-to create an account, then log in from `Login.jsp`.
+To create an account, then log in from `Login.jsp`.
 
 ## Project Structure
 
