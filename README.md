@@ -35,7 +35,7 @@ III BANK lets users register an account, securely log in, track income and expen
 - **Register** :  First name, Last name, email, and password sign-up
  <img width="1447" height="888" alt="image" src="https://github.com/user-attachments/assets/f44aa2a9-0acd-4817-93ca-21c4b41cc19e" />
 
-- **Dashboard** :  Total balance, income, expenses, financial analytics chart, spending categories donut chart, recent transactions, AI advisor panel, and quick add-transaction form
+- **Dashboard** :  Total balance, Income, Expenses, Financial Analytics chart, Spending categories donut chart, Recent transactions, AI advisor panel, and quick add transaction form
  <img width="1897" height="911" alt="image" src="https://github.com/user-attachments/assets/02827265-dc32-45da-bb62-403444a84621" />
 
 - **Transactions** :  Full searchable/sortable transaction history
