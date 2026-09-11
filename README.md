@@ -128,7 +128,7 @@ To create an account, then log in from `Login.jsp`.
 ## Notes
 
 - All routes except `Login.jsp`, `Register.jsp`, and their corresponding servlets are protected by `AuthFilter`, which redirects unauthenticated users back to login.
-- Passwords are hashed with jBCrypt before storage — plaintext passwords are never persisted.
+- Passwords are hashed with jBCrypt before storage plaintext passwords are never persisted.
 
 ## License
 
