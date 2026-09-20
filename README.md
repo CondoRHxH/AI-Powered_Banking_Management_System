@@ -4,7 +4,7 @@ A full-stack JEE (Java Servlets + JSP) banking/personal finance management syste
 
 ## Overview
 
-III BANK lets users register an account, securely log in, track income and expenses, and view an analytics dashboard with spending breakdowns and an AI financial advisor panel.
+This Banking App lets users register an account, securely log in, track income and expenses, and view an analytics dashboard with spending breakdowns and an AI financial advisor panel.
 
 ## Features
 
