@@ -1,6 +1,6 @@
 # Banking App — Personal Finance Manager
 
-A full-stack JEE (Java Servlets + JSP) banking/personal finance management system built with a Maven-based project structure, MySQL persistence, and a modern dark-themed UI.
+A full-stack JEE (Java Servlets + JSP) banking/personal finance management system built with a Maven based project structure, MySQL persistence, and a modern dark-themed UI.
 
 ## Overview
 
