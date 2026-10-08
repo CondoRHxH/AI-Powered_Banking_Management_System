@@ -8,12 +8,12 @@ This Banking App lets users register an account, securely log in, track income a
 
 ## Features
 
-- **Secure authentication** :  Registration and login with hashed passwords (jbcrypt), backed by a servlet `AuthFilter` that protects all routes except public auth pages
-- **Dashboard / Analytics** : Real time balance, total income, and total expenses at a glance, plus a weekly income vs. expenses trend chart
+- **Secure authentication** :  Registration and login with hashed passwords (jbcrypt), backed by a servlet `AuthFilter` that protects all routes except public auth pages.
+- **Dashboard / Analytics** : Real time balance, total income, and total expenses at a glance, plus a weekly income vs. expenses trend chart.
 - **Spending Categories** : Donut chart breakdown of expenses by category (e.g. Food, Rent, Car)
-- **Transactions** : Full transaction history with search, filter by type, and sort, showing running balance impact per entry
-- **Add Transaction** : Quick entry form for income/expense with type, amount, category, date, and optional note
-- **AI Financial Advisor** : In dashboard panel offering a summary of spending behavior and a prompt box to ask financial questions
+- **Transactions** : Full transaction history with search, filter by type, and sort, showing running balance impact per entry.
+- **Add Transaction** : Quick entry form for income/expense with type, amount, category, date, and optional note.
+- **AI Financial Advisor** : In dashboard panel offering a summary of spending behavior and a prompt box to ask financial questions.
 
 ## Tech Stack
 
