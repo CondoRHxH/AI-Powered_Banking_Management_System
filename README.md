@@ -45,10 +45,10 @@ This Banking App lets users register an account, securely log in, track income a
 
 ### Prerequisites
 
-- JDK 17
-- Apache Maven
-- Apache Tomcat 9.x (must be 9.x  the project uses the `javax.servlet` namespace, which is incompatible with Tomcat 10+)
-- MySQL Server 8.x
+- JDK 17.
+- Apache Maven.
+- Apache Tomcat 9.x (must be 9.x  the project uses the `javax.servlet` namespace, which is incompatible with Tomcat 10+).
+- MySQL Server 8.x.
 
 ### Database Setup
 
