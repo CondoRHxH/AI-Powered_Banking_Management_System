@@ -103,7 +103,7 @@ To create an account, then log in from `Login.jsp`.
 ## Project Structure
 
 ```
-├── pom.xml
+├── pom.xml            # Configuration File
 ├── src/
 │   └── main/
 │       ├── java/              # Servlets & DB connection logic
