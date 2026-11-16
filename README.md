@@ -106,6 +106,9 @@ To create an account, then log in from `Login.jsp`.
 ├── pom.xml            # Configuration File
 │
 ├── start.sh           # Configuration File
+│
+├── init.sql           # SQL File
+│
 ├── src/
 │   └── main/
 │       ├── java/              # Servlets & DB connection logic
